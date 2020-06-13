@@ -1,9 +1,10 @@
 import React     from 'react';
 
-const Searchfields=({searchFields,searchChange})=>{
+const Searchfields=({searchChange})=>{
     return(
         <div className="pa2">
-            <input type="search" name="" id="" placeholder='Search Robots' onChange={searchChange} />
+            <input className="pa3 ba b--light-blue bg-lightest-blue"
+                  type="search" name="" id="" placeholder='Search Robots' onChange={searchChange} />
         </div>
     );
 }

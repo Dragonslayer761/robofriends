@@ -4,43 +4,40 @@ import './App.css';
 import Cardlist from './Cardlist';
 import Searchfields from './Searchfields';
 import Scroll from './Scroll';
-import {setSearchField} from './Action';
+import {setSearchField,requestRobots} from './Action';
 
 
 const mapStateToProps =(state)=>{
   return {
-    searchField:state.searchField
+    searchField:state.searchRobots.searchField,
+    robots:state.requestRobots.robots,
+    isPending:state.requestRobots.isPending,
+    error:state.requestRobots.error
   }
 }
 
 const mapDispatchToProps =(dispatch) =>{
-  return {onSearchChange : (event) => dispatch(setSearchField(event.target.value))}
+  return {
+      onSearchChange : (event) => dispatch(setSearchField(event.target.value)),
+      onRequestRobots : () => dispatch(requestRobots())
+    
+    
+    }
 }
 
 class App extends Component {
- constructor(){
-   super();
-   this.state={
-     robots:[]
-   }
- }
- componentDidMount(){
  
-   fetch('https://jsonplaceholder.typicode.com/users')
-   .then(response => response.json())
-   .then(user => {
-     this.setState({robots:user})
-   })
-
+ componentDidMount(){
+   this.props.onRequestRobots();
  }
  
   render(){
-    const {robots}=this.state;
-    const {searchField,onSearchChange}=this.props;
+    
+    const {searchField,onSearchChange,robots,isPending}=this.props;
     const filterdRobots = robots.filter(robots => {
       return robots.name.toLowerCase().includes(searchField.toLowerCase());
     })
-  return !robots.length ? <h1 className="app-header">Loading.....</h1> : (
+  return isPending ? <h1 className="app-header">Loading.....</h1> : (
     <div className="tc ">
       <h1 className="f1 app-header">Robofriends</h1>
       <Searchfields searchChange={onSearchChange}/>
